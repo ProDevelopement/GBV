@@ -17,12 +17,14 @@ class AutoPopulateController extends Controller
     public function autopopulate(Request $request){
         
         $res = file_get_contents($request->input('url'));
-        unlink(public_path('storage/kto.txt'));
+        if(is_file(public_path('kto.txt'))) {
+            unlink(public_path('kto.txt'));
+        }
         blz::truncate();
-        file_put_contents(public_path('storage/kto.txt'), $res);
+        file_put_contents(public_path('kto.txt'), $res);
 
         $delimiter = "\t";
-        $fp = fopen(public_path('storage/kto.txt'), 'r');
+        $fp = fopen(public_path('kto.txt'), 'r');
         while ( !feof($fp) )
         {
             $line = fgets($fp, 2048);
